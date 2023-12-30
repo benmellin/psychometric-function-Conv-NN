@@ -1,9 +1,10 @@
 # Psychometric functions
-- This is my unique solution to a problem from Mike X Cohen's a Deep Understanding of Deep Learning Course.
-- Much of the code is adapted from this course.
 - In this project, I will train a convolutional neural network on Gaussian noise with horizontal or vertical lines.
 - The neural network will learn to classify the Gaussian noise based on whether they have horizontal or vertical lines.
 - Then, I will give the trained network Gaussian noise with lines that are not perfectly horizontal or vertical, and see how the network does.
+- [I've linked the original colab notebook here.](https://colab.research.google.com/drive/1qrz7N6MREYYKZ2z3Rb6ItKd1OOqZ7Ya8?usp=sharing)
+- This is my unique solution to a problem from Mike X Cohen's a Deep Understanding of Deep Learning Course.
+- Much of the code is adapted from this course.
 
 
 ```python
@@ -30,7 +31,7 @@ from skimage.draw import line_aa
       display.set_matplotlib_formats('svg')
 
 
-
+## Create the gaussian noise with vertical or horizontal lines
 ```python
 nGauss  = 1000
 imgSize = 90
@@ -84,11 +85,11 @@ plt.show()
 
 
     
-![svg](/Users/benjaminmellin/Desktop/Teststuff/Convert/Psychometric_3_0.svg)
+![svg](images/Psychometric_3_0.svg)
     
 
 
-
+## Create the gaussian noise with a range of slopes
 ```python
 nGauss  = 10000
 imgSize = 90
@@ -157,11 +158,11 @@ plt.show()
 
 
     
-![svg](/Users/benjaminmellin/Desktop/Teststuff/Convert/Psychometric_5_0.svg)
+![svg](images/Psychometric_5_0.svg)
     
 
 
-
+## Process data
 ```python
 # Convert into PyTorch Datasets
 train_data = TensorDataset(imagesOcc,labels)
@@ -172,7 +173,7 @@ train_loader = DataLoader(train_data,batch_size=batchsize,shuffle=True,drop_last
 test_loader  = DataLoader(imagesTest,batch_size=len(imagesTest))
 ```
 
-
+## Build the model
 ```python
 # create a class for the model
 def makeTheNet():
@@ -209,7 +210,7 @@ def makeTheNet():
   return net,lossfun,optimizer
 ```
 
-
+## Test the untrained network
 ```python
 # test the model with one batch
 net,lossfun,optimizer = makeTheNet()
@@ -237,7 +238,7 @@ print(loss)
     tensor(0.6931, grad_fn=<BinaryCrossEntropyWithLogitsBackward0>)
 
 
-
+## Examine the model
 ```python
 # count the total number of parameters in the model
 summary(net,(1,imgSize,imgSize))
@@ -267,7 +268,7 @@ summary(net,(1,imgSize,imgSize))
     ----------------------------------------------------------------
 
 
-
+## Train the model only on gaussians with veritcal or horizontal lines
 ```python
 # a function that trains the model
 
@@ -341,11 +342,11 @@ plt.show()
 
 
     
-![svg](/Users/benjaminmellin/Desktop/Teststuff/Convert/Psychometric_12_0.svg)
+![svg](images/Psychometric_12_0.svg)
     
 
 
-
+## Test the model on gaussians with a range of slopes
 ```python
 # Make Predictions for the test set
 
@@ -372,11 +373,11 @@ plt.show()
 
 
     
-![svg](/Users/benjaminmellin/Desktop/Teststuff/Convert/Psychometric_13_0.svg)
+![svg](images/Psychometric_13_0.svg)
     
 
 
-
+## Check out results
 ```python
 df=pd.DataFrame(columns=["Vertical", "Horizontal", "Total"], index=np.unique(slopes))
 df=df.fillna(0)
@@ -406,11 +407,11 @@ plt.show()
 
 
     
-![svg](/Users/benjaminmellin/Desktop/Teststuff/Convert/Psychometric_15_0.svg)
+![svg](images/Psychometric_15_0.svg)
     
 
 
-### Quick Analysis
+## Quick Analysis
 - The model appears to be classifying slopes greater than 1 or -1 as vertical and within that range as horizontal.
 - The only slopes where it doesn't make consistent predictions are very close to 1 and -1.
 
